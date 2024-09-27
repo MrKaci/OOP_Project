@@ -1,5 +1,6 @@
 # Create your models here.
 from django.db import models
+import json
 
 
 ##########################################################################################
@@ -14,6 +15,14 @@ class Ville(models.Model):
 
     def __str__(self):
         return f"{self.nom} {self.code_postal} {self.prix_m2}"
+
+    # Méthode JSON
+    def json(self):
+        return {
+            "nom": self.nom,
+            "code_postal": self.code_postal,
+            "prix_m2": self.prix_m2,
+        }
 
 
 ##########################################################################################
@@ -35,6 +44,16 @@ class Local(models.Model):
 class SiegeSocial(Local):
     pass
 
+    # Méthode JSON
+    def json(self):
+        return json.dumps(
+            {
+                "nom": self.nom,
+                "prix": self.ville,
+                "surface": self.surface,
+            }
+        )
+
 
 ##########################################################################################
 class Machine(models.Model):
@@ -49,6 +68,16 @@ class Machine(models.Model):
     # Méthode str
     def __str__(self):
         return f"{self.nom} {self.prix} {self.n_serie}"
+
+    # Méthode JSON
+    def json(self):
+        return json.dumps(
+            {
+                "nom": self.nom,
+                "n_serie": self.n_serie,
+                "prix": self.prix,
+            }
+        )
 
 
 ##########################################################################################
@@ -74,6 +103,13 @@ class Usine(Local):
 
         return TotCost
 
+    # Méthode JSON
+    def json(self):
+        list = []
+        for machines in self.machines.all():
+            list.append(machines.id)
+        return {"machines.id": list}
+
 
 ##########################################################################################
 #  Classe Abstraite
@@ -89,6 +125,15 @@ class Objet(models.Model):
 class Ressource(Objet):
     pass
 
+    # Méthode JSON
+    def json(self):
+        return json.dumps(
+            {
+                "nom": self.nom,
+                "prix": self.prix,
+            }
+        )
+
 
 ##########################################################################################
 class QuantiteRessource(models.Model):
@@ -102,6 +147,15 @@ class QuantiteRessource(models.Model):
     # Méthode str
     def __str__(self):
         return f"{self.ressource} {self.quantite}"
+
+    # Méthode JSON
+    def json(self):
+        return json.dumps(
+            {
+                "quantite": self.quantite,
+                "id": self.ressource.id,
+            }
+        )
 
 
 ##########################################################################################
@@ -118,6 +172,18 @@ class Etape(models.Model):
     def __str__(self):
         return f"{self.nom} {self.duree} {self.quantite_ressource} {self.etape_suivante} {self.machine}"
 
+    # Méthode JSON
+    def json(self):
+        return json.dumps(
+            {
+                "nom": self.nom,
+                "duree": self.duree,
+                "id1": self.machine.id,
+                "id2": self.quantite_ressource.id,
+                "id3": self.etape_suivante.id,
+            }
+        )
+
 
 ##########################################################################################
 class Produit(Objet):
@@ -126,6 +192,14 @@ class Produit(Objet):
     # Méthode str
     def __str__(self):
         return f"{self.premiere_etape}"
+
+    # Méthode JSON
+    def json(self):
+        return json.dumps(
+            {
+                "premiere etape id": self.premiere_etape.id,
+            }
+        )
 
 
 ##########################################################################################
@@ -141,3 +215,13 @@ class Stock(models.Model):
     # Méthode str
     def __str__(self):
         return f"{self.ressource} {self.nombre}"
+
+    # Méthode JSON
+    def json(self):
+        return json.dumps(
+            {
+                "nombre": self.nombre,
+                "id1": self.ressource.id,
+                "id2": self.usine.id,
+            }
+        )
