@@ -5,6 +5,7 @@
 #include <string>
 
 using namespace std;
+using json = nlohmann::json;
 
 class Ville {
  public:
@@ -39,6 +40,10 @@ int main() {
   cout << r.status_code << endl;             // 200
   cout << r.header["content-type"] << endl;  // application/json; charset=utf-8
   cout << r.text << endl;                    // JSON text string
+
+  // Parser le texte
+  json data = json::parse(r.text);
+  cout << data << endl;
 
   return 0;
 }
