@@ -1,3 +1,5 @@
+#include <cpr/cpr.h>
+
 #include <iostream>
 #include <string>
 
@@ -26,8 +28,16 @@ class Ville {
 };
 
 int main() {
+  // Création d'objet
   Ville Toulouse("Paris", 75000, 2000);
   Toulouse.Affichage();
+
+  // Récupération des données
+  cpr::Response r = cpr::Get(cpr::Url{"http://localhost:8000/ville/1"});
+
+  r.status_code;             // 200
+  r.header["content-type"];  // application/json; charset=utf-8
+  r.text;                    // JSON text string
 
   return 0;
 }
