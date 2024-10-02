@@ -1,6 +1,7 @@
 #include <cpr/cpr.h>
 
 #include <iostream>
+#include <nlohmann/json.hpp>
 #include <string>
 
 using namespace std;
@@ -33,11 +34,11 @@ int main() {
   Toulouse.Affichage();
 
   // Récupération des données
-  cpr::Response r = cpr::Get(cpr::Url{"http://localhost:8000/ville/1"});
+  cpr::Response r = cpr::Get(cpr::Url{"http://localhost:8000/Ville/1"});
 
-  r.status_code;             // 200
-  r.header["content-type"];  // application/json; charset=utf-8
-  r.text;                    // JSON text string
+  cout << r.status_code << endl;             // 200
+  cout << r.header["content-type"] << endl;  // application/json; charset=utf-8
+  cout << r.text << endl;                    // JSON text string
 
   return 0;
 }
