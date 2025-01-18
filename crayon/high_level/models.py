@@ -44,15 +44,13 @@ class Local(models.Model):
 class SiegeSocial(Local):
     pass
 
-    # Méthode JSON
     def json(self):
-        return json.dumps(
-            {
-                "nom": self.nom,
-                "prix": self.ville,
-                "surface": self.surface,
-            }
-        )
+        return {
+            "id": self.id,
+            "nom": self.nom,
+            "ville": self.ville.json(),
+            "surface": self.surface,
+        }
 
 
 ##########################################################################################
@@ -103,12 +101,16 @@ class Usine(Local):
 
         return TotCost
 
-    # Méthode JSON
     def json(self):
-        list = []
-        for machines in self.machines.all():
-            list.append(machines.id)
-        return {"machines.id": list}
+        # Liste des ID des machines
+        machine_ids = [machine.id for machine in self.machines.all()]
+
+        return {
+            "nom_usine": self.nom,  # Nom de l'usine
+            "ville": self.ville.nom,  # Nom de la ville de l'usine
+            "surface": self.surface,  # Surface de l'usine
+            "machines": machine_ids,  # Liste des IDs des machines
+        }
 
 
 ##########################################################################################
@@ -121,18 +123,15 @@ class Objet(models.Model):
         abstract = True
 
 
-##########################################################################################
 class Ressource(Objet):
     pass
 
     # Méthode JSON
     def json(self):
-        return json.dumps(
-            {
-                "nom": self.nom,
-                "prix": self.prix,
-            }
-        )
+        return {
+            "nom": self.nom,
+            "prix": self.prix,
+        }
 
 
 ##########################################################################################
@@ -140,22 +139,13 @@ class QuantiteRessource(models.Model):
     ressource = models.ForeignKey(Ressource, on_delete=models.CASCADE)
     quantite = models.IntegerField()
 
-    # Méthode Calcul cout
-    def costs(self):
-        return self.quantite
-
-    # Méthode str
-    def __str__(self):
-        return f"{self.ressource} {self.quantite}"
-
     # Méthode JSON
     def json(self):
-        return json.dumps(
-            {
-                "quantite": self.quantite,
-                "id": self.ressource.id,
-            }
-        )
+        return {
+            "ressource": self.ressource.json(),
+            "quantite": self.quantite,
+            "id": self.ressource.id,
+        }
 
 
 ##########################################################################################
@@ -178,9 +168,8 @@ class Etape(models.Model):
             {
                 "nom": self.nom,
                 "duree": self.duree,
-                "id1": self.machine.id,
-                "id2": self.quantite_ressource.id,
-                "id3": self.etape_suivante.id,
+                "machine utilise": self.machine.nom,
+                "quantite de ressource": self.quantite_ressource.quantite,
             }
         )
 
@@ -188,6 +177,8 @@ class Etape(models.Model):
 ##########################################################################################
 class Produit(Objet):
     premiere_etape = models.ForeignKey(Etape, on_delete=models.CASCADE)
+    nom = models.CharField(max_length=100)
+    prix = models.IntegerField()
 
     # Méthode str
     def __str__(self):
@@ -197,7 +188,9 @@ class Produit(Objet):
     def json(self):
         return json.dumps(
             {
-                "premiere etape id": self.premiere_etape.id,
+                "premiere etape id": self.premiere_etape.nom,
+                "nom du produit": self.nom,
+                "prix du produit": self.prix,
             }
         )
 
@@ -221,7 +214,7 @@ class Stock(models.Model):
         return json.dumps(
             {
                 "nombre": self.nombre,
-                "id1": self.ressource.id,
-                "id2": self.usine.id,
+                "ressource": self.ressource.nom,
+                "usine": self.usine.nom,
             }
         )

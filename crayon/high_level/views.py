@@ -48,7 +48,7 @@ class StockDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         stock = self.get_object()
-        return JsonResponse(stock.json())
+        return JsonResponse(stock.json(), safe=False)
 
 
 class VilleDetailView(DetailView):
@@ -64,7 +64,7 @@ class QuantiteRessourceDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         quantite = self.get_object()
-        return JsonResponse(quantite.json())
+        return JsonResponse(quantite.json(), safe=False)
 
 
 class EtapeDetailView(DetailView):
@@ -72,7 +72,7 @@ class EtapeDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         etape = self.get_object()
-        return JsonResponse(etape.json())
+        return JsonResponse(etape.json(), safe=False)
 
 
 class ProduitDetailView(DetailView):
@@ -80,7 +80,7 @@ class ProduitDetailView(DetailView):
 
     def get(self, request, *args, **kwargs):
         produit = self.get_object()
-        return JsonResponse(produit.json())
+        return JsonResponse(produit.json(), safe=False)
 
 
 class SiegeSocialDetailView(DetailView):
