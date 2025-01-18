@@ -4,11 +4,11 @@ from .models import Machine, Usine, Ressource, Stock, Ville
 
 
 #   Test de modèle machine
-# class MachineModelTests(TestCase):
-#    def test_machine_creation(self):
-#        self.assertEqual(Machine.objects.count(), 0)
-#        Machine.objects.create(nom="scie", prix=1_000, n_serie="1683AI2")
-#        self.assertEqual(Machine.objects.count(), 1)
+class MachineModelTests(TestCase):
+    def test_machine_creation(self):
+        self.assertEqual(Machine.objects.count(), 0)
+        Machine.objects.create(nom="scie", prix=1_000, n_serie="1683AI2")
+        self.assertEqual(Machine.objects.count(), 1)
 
 
 #   Test de calcul de cout
@@ -24,6 +24,6 @@ class CalculCoutTests(TestCase):
         Stock.objects.create(ressource=r1, nombre=1000, usine=U)
         r2 = Ressource.objects.create(nom="mine", prix=15)
         Stock.objects.create(ressource=r2, nombre=50, usine=U)
-
+        self.assertEqual(Usine.objects.first().costs(), 100000)
         # a = Usine.objects.first()
         print(U.costs())
