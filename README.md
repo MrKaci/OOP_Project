@@ -96,7 +96,7 @@ Exemple de la ville Lyon de ID 2 :
 ![Tux, the Linux mascot](/Images/Lyon.png)
 
 Exemple de l'usine Thanina Company de ID 1 :
-![Tux, the Linux mascot](/Images/Usine.png)
+![Tux, the Linux mascot](/Images/Usine1.png)
 
 Exemple de la machine perceuse de ID 2 :
 ![Tux, the Linux mascot](/Images/Machine2.png)
